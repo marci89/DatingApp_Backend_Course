@@ -17,6 +17,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddCors();
 
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +28,13 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
+//If database is not exists, this will create it.
+using var scope = app.Services.CreateScope();
+var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+if (db.Database.GetPendingMigrations().Any())
+{
+	db.Database.Migrate();
+}
 
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"));
 
