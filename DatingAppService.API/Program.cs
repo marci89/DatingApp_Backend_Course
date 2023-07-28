@@ -28,7 +28,7 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-//If database is not exists, this will create it.
+//If database is not exists, this will create it and create every migration update.
 using var scope = app.Services.CreateScope();
 var db = scope.ServiceProvider.GetRequiredService<DataContext>();
 if (db.Database.GetPendingMigrations().Any())
