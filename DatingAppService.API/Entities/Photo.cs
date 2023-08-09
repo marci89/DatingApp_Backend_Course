@@ -1,5 +1,8 @@
-﻿namespace DatingAppService.API.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DatingAppService.API.Entities
 {
+	[Table("Photos")]
 	public class Photo
 	{
 		public int Id { get; set; }
