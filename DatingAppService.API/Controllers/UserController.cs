@@ -1,34 +1,32 @@
-﻿using DatingAppService.API.Data;
-using DatingAppService.API.Entities;
+﻿using DatingAppService.API.Entities;
+using DatingAppService.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DatingAppService.API.Controllers
 {
 	[Authorize]
 	public class UserController : BaseApiController
 	{
-		private readonly DataContext _context;
+		private readonly IUserRepository _userRepository;
 
-		public UserController(DataContext context)
+		public UserController(IUserRepository userRepository)
 		{
-			_context = context;
+			_userRepository = userRepository;
 		}
 
 		[AllowAnonymous]
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
 		{
-			return await _context.Users.ToListAsync();
+			return Ok(await _userRepository.GetUsersAsync());
 		}
 
-		[HttpGet("{id}")]
-		public async Task<ActionResult<AppUser>> GetUser(int id)
+		[HttpGet("{username}")]
+		public async Task<ActionResult<AppUser>> GetUser(string username)
 		{
-			return await _context.Users.FindAsync(id);
+			return await _userRepository.GetUserByUsernameAsync(username);
 		}
-
 
 	}
 }
