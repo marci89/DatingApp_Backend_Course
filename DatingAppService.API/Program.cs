@@ -31,7 +31,11 @@ if (app.Environment.IsDevelopment())
 
 
 //Cors settings
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"));
+app.UseCors(builder => builder
+	.AllowAnyHeader()
+	.AllowAnyMethod()
+	.AllowCredentials()
+	.WithOrigins("*"));
 
 app.UseAuthentication();
 app.UseAuthorization();
