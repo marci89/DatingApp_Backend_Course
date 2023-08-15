@@ -1,4 +1,5 @@
 ﻿using DatingAppService.API.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
@@ -6,9 +7,9 @@ namespace DatingAppService.API.Data
 {
 	public class Seed
 	{
-		public static async Task SeedUsers(DataContext context)
+		public static async Task SeedUsers(UserManager<AppUser> userManager)
 		{
-			if (await context.Users.AnyAsync()) return;
+			if (await userManager.Users.AnyAsync()) return;
 
 			var userData = await File.ReadAllTextAsync("Data/UserSeedData.json");
 
@@ -20,10 +21,8 @@ namespace DatingAppService.API.Data
 			{
 				user.UserName = user.UserName.ToLower();
 
-				context.Users.Add(user);
+				await userManager.CreateAsync(user, "Pa$$w0rd");
 			}
-
-			await context.SaveChangesAsync();
 		}
 	}
 }
