@@ -22,14 +22,12 @@ namespace DatingAppService.API.Migrations
                         name: "FK_Likes_Users_SourceUserId",
                         column: x => x.SourceUserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Likes_Users_TargetUserId",
                         column: x => x.TargetUserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

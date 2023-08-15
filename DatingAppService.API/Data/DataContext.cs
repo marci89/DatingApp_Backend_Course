@@ -24,13 +24,13 @@ namespace DatingAppService.API.Data
 				.HasOne(s => s.SourceUser)
 				.WithMany(l => l.LikedUsers)
 				.HasForeignKey(s => s.SourceUserId)
-				.OnDelete(DeleteBehavior.Cascade);
+				.OnDelete(DeleteBehavior.NoAction);
 
 			builder.Entity<UserLike>()
 				.HasOne(s => s.TargetUser)
 				.WithMany(l => l.LikedByUsers)
 				.HasForeignKey(s => s.TargetUserId)
-				.OnDelete(DeleteBehavior.Cascade);
+				.OnDelete(DeleteBehavior.NoAction);
 		}
 	}
 }

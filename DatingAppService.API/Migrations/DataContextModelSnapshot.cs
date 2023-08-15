@@ -132,13 +132,13 @@ namespace DatingAppService.API.Migrations
                     b.HasOne("DatingAppService.API.Entities.AppUser", "SourceUser")
                         .WithMany("LikedUsers")
                         .HasForeignKey("SourceUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("DatingAppService.API.Entities.AppUser", "TargetUser")
                         .WithMany("LikedByUsers")
                         .HasForeignKey("TargetUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("SourceUser");

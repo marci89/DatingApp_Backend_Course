@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingAppService.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230814194001_LikeEntityAdded")]
+    [Migration("20230815054631_LikeEntityAdded")]
     partial class LikeEntityAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -134,13 +134,13 @@ namespace DatingAppService.API.Migrations
                     b.HasOne("DatingAppService.API.Entities.AppUser", "SourceUser")
                         .WithMany("LikedUsers")
                         .HasForeignKey("SourceUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("DatingAppService.API.Entities.AppUser", "TargetUser")
                         .WithMany("LikedByUsers")
                         .HasForeignKey("TargetUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("SourceUser");
