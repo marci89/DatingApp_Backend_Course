@@ -2,6 +2,7 @@ using DatingAppService.API.Data;
 using DatingAppService.API.Entities;
 using DatingAppService.API.Extensions;
 using DatingAppService.API.Middleware;
+using DatingAppService.API.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +39,8 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+app.MapHub<PresenceHub>("hubs/presence");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

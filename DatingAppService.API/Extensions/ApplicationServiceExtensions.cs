@@ -32,6 +32,8 @@ namespace DatingAppService.API.Extensions
 
 			services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
 
+			services.AddSignalR();
+
 
 			return services;
 		}
