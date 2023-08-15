@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using DatingAppService.API.DTOs;
 using DatingAppService.API.Entities;
 using DatingAppService.API.Helpers;
@@ -34,10 +35,24 @@ namespace DatingAppService.API.Data
 			return await _context.Messages.FindAsync(id);
 		}
 
-		public Task<PagedList<MessageDto>> GetMessagesForUser()
+		public async Task<PagedList<MessageDto>> GetMessagesForUser(MessageParams messageParams)
 		{
-			throw new NotImplementedException();
+			var query = _context.Messages
+				.OrderByDescending(x => x.MessageSent)
+				.AsQueryable();
+
+			query = messageParams.Container switch
+			{
+				"Inbox" => query.Where(u => u.Recipient.UserName == messageParams.Username),
+				"Outbox" => query.Where(u => u.Sender.UserName == messageParams.Username),
+				_ => query.Where(u => u.Recipient.UserName == messageParams.Username && u.DateRead == null)
+			};
+
+			var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
+
+			return await PagedList<MessageDto>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
 		}
+
 
 		public Task<IEnumerable<MessageDto>> GetMessageThread(string currentUserId, string recipientId)
 		{
