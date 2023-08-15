@@ -1,7 +1,5 @@
 ﻿using DatingAppService.API.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 
 namespace DatingAppService.API.Data
@@ -20,11 +18,7 @@ namespace DatingAppService.API.Data
 
 			foreach (var user in users)
 			{
-				using var hmac = new HMACSHA512();
-
 				user.UserName = user.UserName.ToLower();
-				user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Pa$$w0rd"));
-				user.PasswordSalt = hmac.Key;
 
 				context.Users.Add(user);
 			}
