@@ -56,7 +56,7 @@ namespace DatingAppService.API.Controllers
 		{
 			messageParams.Username = User.GetUsername();
 
-			var messages = await _uow.MessageRepository.GetMessagesForUser(messageParams);
+			var messages = await _messageRepository.GetMessagesForUser(messageParams);
 
 			Response.AddPaginationHeader(new PaginationHeader(messages.CurrentPage,
 				messages.PageSize, messages.TotalCount, messages.TotalPages));
