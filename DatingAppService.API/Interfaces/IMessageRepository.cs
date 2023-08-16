@@ -13,5 +13,10 @@ namespace DatingAppService.API.Interfaces
 		Task<IEnumerable<MessageDto>> GetMessageThread(string currentUserName, string recipientUserName);
 		Task<bool> SaveAllAsync();
 
+		void AddGroup(Group group);
+		void RemoveConnection(Connection connection);
+		Task<Connection> GetConnection(string connectionId);
+		Task<Group> GetMessageGroup(string groupName);
+
 	}
 }
