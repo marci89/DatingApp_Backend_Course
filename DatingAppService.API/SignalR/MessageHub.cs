@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using DatingAppService.API.DTOs;
+using DatingAppService.API.Entities;
 using DatingAppService.API.Extensions;
 using DatingAppService.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -10,12 +12,14 @@ namespace DatingAppService.API.SignalR
 	public class MessageHub : Hub
 	{
 		private readonly IMessageRepository _messageRepository;
+		private readonly IUserRepository _userRepository;
 		private readonly IMapper _mapper;
 		private readonly IHubContext<PresenceHub> _presenceHub;
 
-		public MessageHub(IMessageRepository messageRepository, IMapper mapper, IHubContext<PresenceHub> presenceHub)
+		public MessageHub(IMessageRepository messageRepository, IUserRepository userRepository, IMapper mapper, IHubContext<PresenceHub> presenceHub)
 		{
 			_messageRepository = messageRepository;
+			_userRepository = userRepository;
 			_mapper = mapper;
 			_presenceHub = presenceHub;
 		}
@@ -39,6 +43,39 @@ namespace DatingAppService.API.SignalR
 
 			return base.OnDisconnectedAsync(ex);
 		}
+
+		public async Task SendMessage(CreateMessageDto createMessageDto)
+		{
+			var username = Context.User.GetUsername();
+
+			if (username == createMessageDto.RecipientUsername.ToLower())
+				throw new HubException("You cannot send messages to yourself");
+
+			var sender = await _userRepository.GetUserByUsernameAsync(username);
+			var recipient = await _userRepository.GetUserByUsernameAsync(createMessageDto.RecipientUsername);
+
+			if (recipient == null) throw new HubException("Not found user");
+
+			var message = new Message
+			{
+				Sender = sender,
+				Recipient = recipient,
+				SenderUsername = sender.UserName,
+				RecipientUsername = recipient.UserName,
+				Content = createMessageDto.Content
+			};
+
+
+			_messageRepository.AddMessage(message);
+
+			if (await _messageRepository.SaveAllAsync())
+			{
+				var group = GetGroupName(sender.UserName, recipient.UserName);
+
+				await Clients.Group(group).SendAsync("NewMessage", _mapper.Map<MessageDto>(message));
+			}
+		}
+
 
 
 		private string GetGroupName(string caller, string other)
