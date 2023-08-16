@@ -22,9 +22,6 @@ namespace DatingAppService.API.Extensions
 			services.AddCors();
 
 			services.AddScoped<ITokenService, TokenService>();
-			services.AddScoped<IUserRepository, UserRepository>();
-			services.AddScoped<ILikesRepository, LikesRepository>();
-			services.AddScoped<IMessageRepository, MessageRepository>();
 			services.AddScoped<IPhotoService, PhotoService>();
 
 			services.AddScoped<LogUserActivity>();
@@ -35,6 +32,8 @@ namespace DatingAppService.API.Extensions
 
 			services.AddSignalR();
 			services.AddSingleton<PresenceTracker>();
+
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 			return services;
