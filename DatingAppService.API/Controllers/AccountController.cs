@@ -24,23 +24,21 @@ namespace DatingAppService.API.Controllers
 
 
 		[HttpPost("register")]
-		public async Task<ActionResult<UserDto>> Register([FromBody] RegisterDto request)
+		public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
 		{
-			if (await UserExists(request.UserName))
-				return BadRequest("UserName is taken");
+			if (await UserExists(registerDto.UserName)) return BadRequest("Username is taken");
 
-			var user = _mapper.Map<AppUser>(request);
+			var user = _mapper.Map<AppUser>(registerDto);
 
-			user.UserName = request.UserName;
+			user.UserName = registerDto.UserName.ToLower();
 
-			var result = await _userManager.CreateAsync(user, request.Password);
+			var result = await _userManager.CreateAsync(user, registerDto.Password);
 
 			if (!result.Succeeded) return BadRequest(result.Errors);
 
 			var roleResult = await _userManager.AddToRoleAsync(user, "Member");
 
 			if (!roleResult.Succeeded) return BadRequest(result.Errors);
-
 
 			return new UserDto
 			{
