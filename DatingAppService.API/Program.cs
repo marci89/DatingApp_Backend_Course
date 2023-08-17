@@ -42,6 +42,9 @@ app.UseAuthorization();
 
 app.UseHttpsRedirection();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.MapControllers();
 
 app.MapHub<PresenceHub>("hubs/presence");
