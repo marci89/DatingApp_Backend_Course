@@ -7,8 +7,6 @@ This is the dating app backend.
 - Repository and unitofwork pattern
 - automapper
 - SignalR
-- Facade pattern
-- Composite pattern
 - JWT token auth
 
 ## Setup
